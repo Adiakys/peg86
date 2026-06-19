@@ -88,25 +88,9 @@
 
       autostart: true,
     });
-    
-    const isTouchDevice =
-      window.matchMedia("(pointer: coarse)").matches;
 
-    emulator.add_listener("emulator-ready", async () => {
-      STATUS.textContent = "Loading state...";
-      try {
-        const buf = await fetch(stateUrl).then(r => r.arrayBuffer());
-        await emulator.restore_state(buf);
-        STATUS.textContent = "Running.";
-        if (isTouchDevice) {
-          ffwd.style.display = "flex";
-        }
-      } catch (e) {
-        STATUS.textContent = "State load failed: " + e.message;
-        console.error(e);
-      }
-    });
-    
+    window.PEG86 = { emulator, stateFile, stateUrl }; // consumed by save.js
+
     document.getElementById("text_input").addEventListener("keydown", async (e) => {
       if (e.key === "Enter") {
         e.preventDefault();
@@ -142,5 +126,6 @@
         });
 
   </script>
+  <script src="save.js"></script>
 </body>
 </html>
